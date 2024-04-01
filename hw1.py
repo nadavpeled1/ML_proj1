@@ -23,8 +23,23 @@ def preprocess(X,y):
     # TODO: Implement the normalization function.                             #
     ###########################################################################
     # see https://en.wikipedia.org/wiki/Feature_scaling for more information about the calculation
-    X = (X - np.mean(X)) / np.std(X)
-    y = (y - np.mean(y)) / np.std(y)
+
+    x_mean = np.mean(X)
+    x_max = np.max(X)
+    x_min = np.min(X)
+
+    y_mean = np.mean(y)
+    y_max = np.max(y)
+    y_min = np.min(y)
+
+    # Avoid division by zero
+    if x_max == x_min:
+        raise ValueError("Cannot perform mean normalization: x_max equals x_min")
+    if y_max == y_min:
+        raise ValueError("Cannot perform mean normalization: y_max equals y_min")
+
+    X = (X - x_mean) / (x_max - x_min)
+    y = (y - y_mean) / (y_max - y_min)
 
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -48,6 +63,7 @@ def apply_bias_trick(X):
 
     # We use Reshape on input array to ensure it's two-dimensional
     # Since we are going to insert a column of 1's, we need to make sure that the input is a 2D array.
+    # the -1 in the reshape function means that we want numpy to figure out what the value should be.
     if X.ndim == 1:
         X = X.reshape(-1, 1)
 
