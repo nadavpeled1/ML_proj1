@@ -45,7 +45,16 @@ def apply_bias_trick(X):
     ###########################################################################
     # TODO: Implement the bias trick by adding a column of ones to the data.                             #
     ###########################################################################
-    pass
+
+    # We use Reshape on input array to ensure it's two-dimensional
+    # Since we are going to insert a column of 1's, we need to make sure that the input is a 2D array.
+    if X.ndim == 1:
+        X = X.reshape(-1, 1)
+
+    # use np.insert to insert a column of 1's into X at index 0.
+    # axis=1 means we insert a column.
+    X = np.insert(X, 0, 1, axis=1)
+
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
