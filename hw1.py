@@ -22,7 +22,10 @@ def preprocess(X,y):
     ###########################################################################
     # TODO: Implement the normalization function.                             #
     ###########################################################################
-    pass
+    # see https://en.wikipedia.org/wiki/Feature_scaling for more information about the calculation
+    X = (X - np.mean(X)) / np.std(X)
+    y = (y - np.mean(y)) / np.std(y)
+
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
