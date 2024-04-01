@@ -94,7 +94,16 @@ def compute_cost(X, y, theta):
     ###########################################################################
     # TODO: Implement the MSE cost function.                                  #
     ###########################################################################
-    pass
+
+    # Compute hypothesis using matrix multiplication (dot product):
+    h = np.dot(X, theta)
+
+    # Compute the squared error (hypothesis - y)^2, in vectorized form:
+    squared_error = np.square(h - y)
+
+    # Compute the cost function J:
+    J = np.sum(squared_error) / (2 * len(y))
+    # print(J)
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
