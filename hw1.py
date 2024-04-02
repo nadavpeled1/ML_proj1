@@ -1,6 +1,6 @@
 ###### Your ID ######
-# ID1: 123456789
-# ID2: 987654321
+# ID1: 205734049
+# ID2: 208522094
 #####################
 
 # imports 
@@ -64,13 +64,14 @@ def apply_bias_trick(X):
     # We use Reshape on input array to ensure it's two-dimensional
     # Since we are going to insert a column of 1's, we need to make sure that the input is a 2D array.
     # the -1 in the reshape function means that we want numpy to figure out what the value should be.
-    if X.ndim == 1:
-        X = X.reshape(-1, 1)
-
-    # use np.insert to insert a column of 1's into X at index 0.
-    # axis=1 means we insert a column.
-    X = np.insert(X, 0, 1, axis=1)
-
+    # if X.ndim == 1:
+    #     X = X.reshape(-1, 1)
+    #
+    # # use np.insert to insert a column of 1's into X at index 0.
+    # # axis=1 means we insert a column.
+    # X = np.insert(X, 0, 1, axis=1)
+    N = X.shape[0]
+    X = np.c_[np.ones((N, 1)), X]
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
@@ -284,7 +285,8 @@ def find_best_alpha(X_train, y_train, X_val, y_val, iterations):
 
         # check the validation loss using the optimal theta and record it in the dictionary
         alpha_dict[alpha] = compute_cost(X_val, y_val, current_theta)
-    #print("finished all alphas")
+    print("finished all alphas")
+    print(alpha_dict)
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
