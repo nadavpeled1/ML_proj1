@@ -180,7 +180,14 @@ def compute_pinv(X, y):
     ###########################################################################
     # TODO: Implement the pseudoinverse algorithm.                            #
     ###########################################################################
-    pass
+    # we are looking for the inverse matrix X^-1 so we can multiply it by y
+    # more information on lec.1 time 2:12:00, 2:26:00 , slide 73
+    # by slide 73-74: theta = pinv(X) * y = (X^T * X)^-1 * X^T * y
+
+    X_pinv = np.dot(np.linalg.inv(np.dot(X.T, X)), X.T)
+    pinv_theta = np.dot(X_pinv, y) # M_mxn+1 * M_mx1 = M_n+1x1,
+    # (the optimal parameters vector of the model)
+
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
