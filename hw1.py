@@ -99,7 +99,8 @@ def compute_cost(X, y, theta):
     h = np.dot(X, theta)
 
     # Compute the squared error (hypothesis - y)^2, in vectorized form:
-    squared_error = np.square(h - y)
+    error = h - y
+    squared_error = error ** 2
 
     # Compute the cost function J:
     J = np.sum(squared_error) / (2 * len(y))
@@ -283,8 +284,7 @@ def find_best_alpha(X_train, y_train, X_val, y_val, iterations):
 
         # check the validation loss using the optimal theta and record it in the dictionary
         alpha_dict[alpha] = compute_cost(X_val, y_val, current_theta)
-
-
+    #print("finished all alphas")
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
@@ -309,7 +309,7 @@ def forward_feature_selection(X_train, y_train, X_val, y_val, best_alpha, iterat
     - selected_features: A list of selected top 5 feature indices
     """
     selected_features = []
-    #####c######################################################################
+    ###########################################################################
     # TODO: Implement the function and find the best alpha value.             #
     ###########################################################################
     pass
