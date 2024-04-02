@@ -135,7 +135,25 @@ def gradient_descent(X, y, theta, alpha, num_iters):
     ###########################################################################
     # TODO: Implement the gradient descent optimization algorithm.            #
     ###########################################################################
-    pass
+    # iterate num_iters times to update theta:
+    # for each iteration, compute the hypothesis, the error, the gradient, and update theta.
+    for i in range(num_iters):
+        # Compute hypothesis using matrix multiplication (dot product):
+        h = np.dot(X, theta)
+
+        # Compute the error (hypothesis - y), vectorized form:
+        error = h - y
+
+        # after deriving the cost function, we get the cost function J = (1/m) * sum((h - y) * X)
+        # Compute using vectorized form: (the dot product includes the summing)
+        gradient = np.dot(error, X) / len(y)
+
+        # Update theta:
+        theta = theta - alpha * gradient
+
+        # Compute the cost function J:
+        J = compute_cost(X, y, theta)
+        J_history.append(J)
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
