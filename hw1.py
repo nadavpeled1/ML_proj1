@@ -181,7 +181,7 @@ def compute_pinv(X, y):
     # TODO: Implement the pseudoinverse algorithm.                            #
     ###########################################################################
     # we are looking for the inverse matrix X^-1 so we can multiply it by y
-    # more information on lec.1 time 2:12:00, 2:26:00 , slide 73
+    # more information on lec.1 time 2:12:00, 2:26:00 , slide 73-74
     # by slide 73-74: theta = pinv(X) * y = (X^T * X)^-1 * X^T * y
 
     X_pinv = np.dot(np.linalg.inv(np.dot(X.T, X)), X.T)
@@ -217,7 +217,29 @@ def efficient_gradient_descent(X, y, theta, alpha, num_iters):
     ###########################################################################
     # TODO: Implement the efficient gradient descent optimization algorithm.  #
     ###########################################################################
-    pass
+    for i in range(num_iters):
+        # Compute hypothesis using matrix multiplication (dot product):
+        h = np.dot(X, theta)
+
+        # Compute the error (hypothesis - y), vectorized form:
+        error = h - y
+
+        # after deriving the cost function, we get the cost function J = (1/m) * sum((h - y) * X)
+        # Compute using vectorized form: (the dot product includes the summing)
+        gradient = np.dot(error, X) / len(y)
+
+        # Update theta:
+        theta = theta - alpha * gradient
+
+        # Compute the cost function J:
+        J = compute_cost(X, y, theta)
+        J_history.append(J)
+
+        # check the delta of the cost function:
+        # if the difference between the last two cost functions is smaller than 1e-8
+        # the i>0 condition is to avoid the first iteration
+        if i > 0 and abs(J_history[-1] - J_history[-2]) < 1e-8:
+            break
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
@@ -244,7 +266,25 @@ def find_best_alpha(X_train, y_train, X_val, y_val, iterations):
     ###########################################################################
     # TODO: Implement the function and find the best alpha value.             #
     ###########################################################################
-    pass
+    # steps:
+    # for each alpha:
+    # 1. find the optimal theta using efficient_gradient_descent
+    # 2. check the validation loss using the optimal theta
+    # 3. record the validation loss in the dictionary
+    # return the dictionary
+    for alpha in alphas:
+        # initialize theta to random values
+        np.random.seed(42)
+        current_theta = np.random.random(size=X_train.shape[1]) # we use size= for the amount of features
+
+        # find the optimal theta using efficient_gradient_descent
+        # (we neglect the returned J_history)
+        current_theta , _ = efficient_gradient_descent(X_train, y_train, current_theta, alpha, iterations)
+
+        # check the validation loss using the optimal theta and record it in the dictionary
+        alpha_dict[alpha] = compute_cost(X_val, y_val, current_theta)
+
+
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
