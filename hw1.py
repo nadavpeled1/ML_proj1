@@ -356,13 +356,16 @@ def forward_feature_selection(X_train, y_train, X_val, y_val, best_alpha, iterat
             if current_validation_loss < best_validation_loss:
                 best_validation_loss = current_validation_loss
                 best_feature = feature
-            selected_features.remove(feature)
+            selected_features.pop()
 
         # choose the feature that resulted in the best performance and add it to the selected features list.
         selected_features.append(best_feature)
         unselected_features.remove(best_feature)
 
     selected_features = selected_features[1:]  # remove the bias trick feature
+    # reduce all the features by 1 to match the original features
+    # (since we added the bias trick we increased the index by 1)
+    selected_features = [feature - 1 for feature in selected_features]
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
