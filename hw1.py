@@ -333,39 +333,36 @@ def forward_feature_selection(X_train, y_train, X_val, y_val, best_alpha, iterat
 
     # initialize the unselected features list to all the features except the bias trick
     unselected_features = list(range(1, X_train.shape[1]))
-
-    while len(selected_features) < 5:
+    selected_features.append(0) # add the bias trick feature
+    while len(selected_features) < 6: # we want to select 5 features, not including the bias trick
         # initialize the best validation loss to infinity
-        best_validation_loss = float('inf')
+        best_validation_loss = np.inf
         # initialize the best feature to -1
         best_feature = -1
-
-        # for each feature not in the selected features list:
+        np.random.seed(42)
+        # initialize theta to random values
+        random_theta = np.random.random(len(selected_features) + 1) #+1 for the feature to be added
         for feature in unselected_features:
             # Add the feature to the selected set temporarily.
-            current_features = selected_features + [feature]
-
+            selected_features.append(feature)
             # Train the model using the selected features
-            # initialize theta to random values
-            np.random.seed(42)
-            shape = len(current_features)
-            current_theta = np.random.random(shape)
-            current_theta, _ = efficient_gradient_descent(X_train[:, current_features], y_train, current_theta, best_alpha, iterations)
-
+            current_theta, _ = efficient_gradient_descent(X_train[:, selected_features], y_train, random_theta,
+                                                          best_alpha, iterations)
             # check the validation loss using the optimal theta
-            current_validation_loss = compute_cost(X_val[:, current_features], y_val, current_theta)
+            current_validation_loss = compute_cost(X_val[:, selected_features], y_val, current_theta)
 
             # if the validation loss is better than the best validation loss, update the best validation loss and the
             # best feature.
             if current_validation_loss < best_validation_loss:
                 best_validation_loss = current_validation_loss
                 best_feature = feature
+            selected_features.remove(feature)
 
         # choose the feature that resulted in the best performance and add it to the selected features list.
         selected_features.append(best_feature)
+        unselected_features.remove(best_feature)
 
-
-
+    selected_features = selected_features[1:]  # remove the bias trick feature
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
