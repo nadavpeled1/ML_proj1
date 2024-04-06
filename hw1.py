@@ -24,19 +24,19 @@ def preprocess(X,y):
     ###########################################################################
     # see https://en.wikipedia.org/wiki/Feature_scaling for more information about the calculation
 
-    x_mean = np.mean(X)
-    x_max = np.max(X)
-    x_min = np.min(X)
+    x_mean = np.mean(X, axis=0)
+    x_max = np.max(X, axis=0)
+    x_min = np.min(X, axis=0)
 
     y_mean = np.mean(y)
     y_max = np.max(y)
     y_min = np.min(y)
 
     # Avoid division by zero
-    if x_max == x_min:
-        raise ValueError("Cannot perform mean normalization: x_max equals x_min")
-    if y_max == y_min:
-        raise ValueError("Cannot perform mean normalization: y_max equals y_min")
+    # if x_max == x_min:
+    #     raise ValueError("Cannot perform mean normalization: x_max equals x_min")
+    # if y_max == y_min:
+    #     raise ValueError("Cannot perform mean normalization: y_max equals y_min")
 
     X = (X - x_mean) / (x_max - x_min)
     y = (y - y_mean) / (y_max - y_min)
@@ -101,13 +101,13 @@ def compute_cost(X, y, theta):
     ###########################################################################
 
     # Compute hypothesis using matrix multiplication (dot product):
-    h = np.dot(X, theta)
+    h = np.dot(theta, X.T)
 
     # Compute the squared error (hypothesis - y)^2, in vectorized form:
-    squared_error = (h - y) ** 2
+    sq_error = (h - y) ** 2
 
     # Compute the cost function J:
-    J = np.sum(squared_error) / (2 * len(y))
+    J = np.sum(sq_error) / (2 * len(y))
     # print(J)
     ###########################################################################
     #                             END OF YOUR CODE                            #
@@ -144,7 +144,7 @@ def gradient_descent(X, y, theta, alpha, num_iters):
     # for each iteration, compute the hypothesis, the error, the gradient, and update theta.
     for i in range(num_iters):
         # Compute hypothesis using matrix multiplication (dot product):
-        h = np.dot(X, theta)
+        h = np.dot(theta, X.T)
 
         # Compute the error (hypothesis - y), vectorized form:
         error = h - y
@@ -224,7 +224,7 @@ def efficient_gradient_descent(X, y, theta, alpha, num_iters):
     ###########################################################################
     for i in range(num_iters):
         # Compute hypothesis using matrix multiplication (dot product):
-        h = np.dot(X, theta)
+        h = np.dot(theta, X.T)
 
         # Compute the error (hypothesis - y), vectorized form:
         error = h - y
