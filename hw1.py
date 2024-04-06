@@ -240,7 +240,7 @@ def efficient_gradient_descent(X, y, theta, alpha, num_iters):
         # check the delta of the cost function:
         # if the difference between the last two cost functions is smaller than 1e-8
         # the i>0 condition is to avoid the first iteration
-        if i > 0 and abs(J_history[-1] - J_history[-2]) < 1e-8:
+        if i > 0 and J_history[-2] - J_history[-1] < 1e-8:
             break
     ###########################################################################
     #                             END OF YOUR CODE                            #
