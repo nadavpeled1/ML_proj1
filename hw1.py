@@ -318,7 +318,54 @@ def forward_feature_selection(X_train, y_train, X_val, y_val, best_alpha, iterat
     ###########################################################################
     # TODO: Implement the function and find the best alpha value.             #
     ###########################################################################
-    pass
+    # steps:
+    # 1. initialize the selected features list to an empty list
+    # 2. for each feature not in the selected features list:
+    #     1. Add the feature to the selected set temporarily.
+    #     2. Train the model using the selected features, check the validation loss.
+    #     3. if the validation loss is better than the best validation loss, update the best validation loss and the best feature.
+    # 3. choose the feature that resulted in the best performance and add it to the selected features list.
+    # 4. repeat the process until you have selected 5 features, not including the bias trick.
+
+    # apply the bias trick to the input data
+    X_train = apply_bias_trick(X_train)
+    X_val = apply_bias_trick(X_val)
+
+    # initialize the unselected features list to all the features except the bias trick
+    unselected_features = list(range(1, X_train.shape[1]))
+
+    while len(selected_features) < 5:
+        # initialize the best validation loss to infinity
+        best_validation_loss = float('inf')
+        # initialize the best feature to -1
+        best_feature = -1
+
+        # for each feature not in the selected features list:
+        for feature in unselected_features:
+            # Add the feature to the selected set temporarily.
+            current_features = selected_features + [feature]
+
+            # Train the model using the selected features
+            # initialize theta to random values
+            np.random.seed(42)
+            shape = len(current_features)
+            current_theta = np.random.random(shape)
+            current_theta, _ = efficient_gradient_descent(X_train[:, current_features], y_train, current_theta, best_alpha, iterations)
+
+            # check the validation loss using the optimal theta
+            current_validation_loss = compute_cost(X_val[:, current_features], y_val, current_theta)
+
+            # if the validation loss is better than the best validation loss, update the best validation loss and the
+            # best feature.
+            if current_validation_loss < best_validation_loss:
+                best_validation_loss = current_validation_loss
+                best_feature = feature
+
+        # choose the feature that resulted in the best performance and add it to the selected features list.
+        selected_features.append(best_feature)
+
+
+
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
