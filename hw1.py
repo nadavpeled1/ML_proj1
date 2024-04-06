@@ -64,12 +64,16 @@ def apply_bias_trick(X):
     # We use Reshape on input array to ensure it's two-dimensional
     # Since we are going to insert a column of 1's, we need to make sure that the input is a 2D array.
     # the -1 in the reshape function means that we want numpy to figure out what the value should be.
+
+    # old version before the insturction to avoid checking the dimension:
     # if X.ndim == 1:
     #     X = X.reshape(-1, 1)
     #
     # # use np.insert to insert a column of 1's into X at index 0.
     # # axis=1 means we insert a column.
     # X = np.insert(X, 0, 1, axis=1)
+
+    # updated version:
     N = X.shape[0]
     X = np.c_[np.ones((N, 1)), X]
     ###########################################################################
@@ -100,8 +104,7 @@ def compute_cost(X, y, theta):
     h = np.dot(X, theta)
 
     # Compute the squared error (hypothesis - y)^2, in vectorized form:
-    error = h - y
-    squared_error = error ** 2
+    squared_error = (h - y) ** 2
 
     # Compute the cost function J:
     J = np.sum(squared_error) / (2 * len(y))
@@ -240,6 +243,7 @@ def efficient_gradient_descent(X, y, theta, alpha, num_iters):
         # check the delta of the cost function:
         # if the difference between the last two cost functions is smaller than 1e-8
         # the i>0 condition is to avoid the first iteration
+        # reminder: j is a decreasing non-negative function so the difference will be positive
         if i > 0 and J_history[-2] - J_history[-1] < 1e-8:
             break
     ###########################################################################
@@ -281,12 +285,12 @@ def find_best_alpha(X_train, y_train, X_val, y_val, iterations):
 
         # find the optimal theta using efficient_gradient_descent
         # (we neglect the returned J_history)
-        current_theta , _ = efficient_gradient_descent(X_train, y_train, current_theta, alpha, iterations)
+        current_theta, _ = efficient_gradient_descent(X_train, y_train, current_theta, alpha, iterations)
 
         # check the validation loss using the optimal theta and record it in the dictionary
         alpha_dict[alpha] = compute_cost(X_val, y_val, current_theta)
-    print("finished all alphas")
-    print(alpha_dict)
+    # print("finished all alphas")
+    # print(alpha_dict)
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
