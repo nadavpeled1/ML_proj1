@@ -401,7 +401,7 @@ def create_square_features(df):
             # Create the new feature
             mult_feature = pd.DataFrame(df[df.columns[i]] * df[df.columns[j]])
             # Rename the column
-            mult_feature.columns = [df.columns[i] + ' * ' + df.columns[j]]
+            mult_feature.columns = [df.columns[i] + '*' + df.columns[j]]
             # Append the new feature to the original dataframe
             df_poly = pd.concat([df_poly, mult_feature], axis=1)
     ###########################################################################
