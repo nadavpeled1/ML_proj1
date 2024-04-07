@@ -74,8 +74,7 @@ def apply_bias_trick(X):
     # X = np.insert(X, 0, 1, axis=1)
 
     # updated version:
-    N = X.shape[0]
-    X = np.c_[np.ones((N, 1)), X]
+    X = np.c_[np.ones((X.shape[0], 1)), X]
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
@@ -387,7 +386,24 @@ def create_square_features(df):
     ###########################################################################
     # TODO: Implement the function to add polynomial features                 #
     ###########################################################################
-    pass
+    # add the square of each feature to the dataframe
+    for col in df.columns:
+        # Create square feature
+        sq_feature = pd.DataFrame(df[col] ** 2)
+        # Rename the column
+        sq_feature.columns = [col + '^2']
+        # Append the square feature to the original dataframe
+        df_poly = pd.concat([df_poly, sq_feature], axis=1)
+
+    # add the multiplication of each pair of features to the dataframe
+    for i in range(len(df.columns)):
+        for j in range(i + 1, len(df.columns)):
+            # Create the new feature
+            mult_feature = pd.DataFrame(df[df.columns[i]] * df[df.columns[j]])
+            # Rename the column
+            mult_feature.columns = [df.columns[i] + ' * ' + df.columns[j]]
+            # Append the new feature to the original dataframe
+            df_poly = pd.concat([df_poly, mult_feature], axis=1)
     ###########################################################################
     #                             END OF YOUR CODE                            #
     ###########################################################################
