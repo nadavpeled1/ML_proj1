@@ -387,7 +387,7 @@ def create_square_features(df):
     # TODO: Implement the function to add polynomial features                 #
     ###########################################################################
     # add the square of each feature to the dataframe
-    for col in df.columns:
+    for i, col in enumerate(df.columns):
         # Create square feature
         sq_feature = pd.DataFrame(df[col] ** 2)
         # Rename the column
@@ -395,13 +395,12 @@ def create_square_features(df):
         # Append the square feature to the original dataframe
         df_poly = pd.concat([df_poly, sq_feature], axis=1)
 
-    # add the multiplication of each pair of features to the dataframe
-    for i in range(len(df.columns)):
-        for j in range(i + 1, len(df.columns)):
+        # add the multiplication of each pair of features to the dataframe
+        for other_col in df.columns[i:]:
             # Create the new feature
-            mult_feature = pd.DataFrame(df[df.columns[i]] * df[df.columns[j]])
+            mult_feature = pd.DataFrame(df[col] * df[other_col])
             # Rename the column
-            mult_feature.columns = [df.columns[i] + '*' + df.columns[j]]
+            mult_feature.columns = [col + '*' + other_col]
             # Append the new feature to the original dataframe
             df_poly = pd.concat([df_poly, mult_feature], axis=1)
     ###########################################################################
